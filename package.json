@@ -1,0 +1,8 @@
+{
+  "name": "deephaven-js-plugins",
+  "workspaces": [
+    "dashboard-object-viewer",
+    "matplotlib",
+    "table-example"
+  ]
+}
