@@ -14,10 +14,10 @@ type StateProps = {
   };
 };
 
-export type JsExportedObjectType = 'Table' | 'TableMap';
+export type JsExportedObjectType = 'Table' | 'TableMap' | 'Figure';
 
 export type JsWidgetExportedObject = {
-  type: 'Table' | 'TableMap';
+  type: JsExportedObjectType;
   fetch: () => Promise<unknown>;
 };
 
@@ -82,8 +82,8 @@ export class ObjectPanel extends React.Component<
     log.info('handleExportedTypeClick', exportedObject, index);
 
     const { type } = exportedObject;
-    if (type === 'Table') {
-      log.info('Opening table', index);
+    if (type === 'Table' || type === 'Figure') {
+      log.info('Opening object', index);
 
       const { glEventHub, metadata } = this.props;
       const { name } = metadata;
