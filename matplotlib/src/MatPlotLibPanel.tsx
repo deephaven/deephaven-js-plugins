@@ -3,7 +3,7 @@ import dh, { Table } from "@deephaven/jsapi-shim";
 import Log from "@deephaven/log";
 import "./MatPlotLibPanel.scss";
 
-const log = Log.module("@deephaven/js-plugin-matplotlib/MatPlotLibPanel");
+const log = Log.module("@deephaven/js-plugin-matplotlib.MatPlotLibPanel");
 
 enum InputColumn {
   key = "key",
@@ -27,7 +27,7 @@ export type MatPlotLibWidget = {
 };
 
 export type MatPlotLibPanelProps = {
-  fetch: () => Promise<MatPlotLibWidget>;
+  fetch?: () => Promise<MatPlotLibWidget>;
 };
 
 export type MatPlotLibPanelState = {
@@ -46,9 +46,13 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
 
   useEffect(
     function initInputTable() {
+      if (!inputTable) {
+        return;
+      }
+
       let table = inputTable;
       async function openTable() {
-        log.debug2("openTable");
+        log.info("openTable");
         const keyColumn = table.findColumn(InputColumn.key);
         const valueColumn = table.findColumn(InputColumn.value);
         // Filter on the 'revision' key, listen for updates on the value
@@ -56,7 +60,7 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
           keyColumn.filter().eq(dh.FilterValue.ofString(InputKey.revision)),
         ]);
         table.addEventListener(dh.Table.EVENT_UPDATED, ({ detail: data }) => {
-          const newRevision = data.getRow(valueColumn);
+          const newRevision = data.rows[0].get(valueColumn);
           log.debug("New revision", newRevision);
           setRevision(newRevision);
         });
@@ -64,7 +68,7 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
       }
       openTable();
       return function closeTable() {
-        log.debug2("closeTable");
+        log.info("closeTable");
         table.close();
       };
     },
@@ -74,22 +78,21 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
   useEffect(
     function updateData() {
       async function fetchData() {
-        log.debug("fetchData");
+        log.info("fetchData");
         const widget = await fetch();
-        if (inputTable !== undefined) {
+        const imageData = widget.getDataAsBase64();
+        setImageSrc(`data:image/png;base64,${imageData}`);
+        if (revision < 0) {
+          log.info("Getting new input table");
           // We haven't connected to the input table yet, do that
           const newInputTable =
             (await widget.exportedObjects[0].fetch()) as Table;
           setInputTable(newInputTable);
-        } else if (revision >= 0) {
-          // We've got a new revision, update the image data
-          const imageData = await widget.getDataAsBase64();
-          setImageSrc(`data:image/png;base64,${imageData}`);
         }
       }
       fetchData();
     },
-    [fetch, inputTable, revision]
+    [fetch, revision]
   );
 
   return (
