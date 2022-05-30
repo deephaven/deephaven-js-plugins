@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import dh, { Table } from "@deephaven/jsapi-shim";
-import Log from "@deephaven/log";
-import "./MatPlotLibPanel.scss";
+import React, { useEffect, useState } from 'react';
+import dh, { Table } from '@deephaven/jsapi-shim';
+import Log from '@deephaven/log';
+import './MatPlotLibPanel.scss';
+import { PanelProps } from '@deephaven/dashboard';
 
-const log = Log.module("@deephaven/js-plugin-matplotlib.MatPlotLibPanel");
+const log = Log.module('@deephaven/js-plugin-matplotlib.MatPlotLibPanel');
 
 enum InputColumn {
-  key = "key",
-  value = "value",
+  key = 'key',
+  value = 'value',
 }
 
 enum InputKey {
-  revision = "revision",
-  width = "width",
-  height = "height",
+  revision = 'revision',
+  width = 'width',
+  height = 'height',
 }
 
 export type MatPlotLibExportedObject = {
@@ -28,7 +29,7 @@ export type MatPlotLibWidget = {
 
 export type MatPlotLibPanelProps = {
   fetch?: () => Promise<MatPlotLibWidget>;
-};
+} & PanelProps;
 
 export type MatPlotLibPanelState = {
   imageData?: string;
@@ -52,7 +53,7 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
 
       let table = inputTable;
       async function openTable() {
-        log.info("openTable");
+        log.debug('openTable');
         const keyColumn = table.findColumn(InputColumn.key);
         const valueColumn = table.findColumn(InputColumn.value);
         // Filter on the 'revision' key, listen for updates on the value
@@ -61,14 +62,14 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
         ]);
         table.addEventListener(dh.Table.EVENT_UPDATED, ({ detail: data }) => {
           const newRevision = data.rows[0].get(valueColumn);
-          log.debug("New revision", newRevision);
+          log.debug('New revision', newRevision);
           setRevision(newRevision);
         });
         table.setViewport(0, 0, [valueColumn]);
       }
       openTable();
       return function closeTable() {
-        log.info("closeTable");
+        log.debug('closeTable');
         table.close();
       };
     },
@@ -78,12 +79,12 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
   useEffect(
     function updateData() {
       async function fetchData() {
-        log.info("fetchData");
+        log.debug('fetchData');
         const widget = await fetch();
         const imageData = widget.getDataAsBase64();
         setImageSrc(`data:image/png;base64,${imageData}`);
         if (revision <= 0) {
-          log.info("Getting new input table");
+          log.debug('Getting new input table');
           // We haven't connected to the input table yet, do that
           const newInputTable =
             (await widget.exportedObjects[0].fetch()) as Table;
@@ -102,6 +103,6 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
   );
 };
 
-MatPlotLibPanel.COMPONENT = "MatPlotLibPanel";
+MatPlotLibPanel.COMPONENT = 'MatPlotLibPanel';
 
 export default MatPlotLibPanel;

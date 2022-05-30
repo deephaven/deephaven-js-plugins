@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect } from "react";
-import shortid from "shortid";
+import React, { useCallback, useEffect } from 'react';
+import shortid from 'shortid';
 import {
   DashboardPluginComponentProps,
   LayoutUtils,
   useListener,
-} from "@deephaven/dashboard";
-import { VariableDefinition } from "@deephaven/jsapi-shim";
-import Log from "@deephaven/log";
-import MatPlotLibPanel from "./MatPlotLibPanel";
+} from '@deephaven/dashboard';
+import { VariableDefinition } from '@deephaven/jsapi-shim';
+import Log from '@deephaven/log';
+import MatPlotLibPanel from './MatPlotLibPanel';
 
-const log = Log.module("@deephaven/js-plugin-matplotlib.DashboardPlugin");
+const log = Log.module('@deephaven/js-plugin-matplotlib.DashboardPlugin');
 
 export const DashboardPlugin = ({
   id,
@@ -33,10 +33,10 @@ export const DashboardPlugin = ({
         // Just ignore table and figure types - only want interesting other types
         return;
       }
-      log.info("Panel opened of type", type);
+      log.info('Panel opened of type', type);
       const metadata = { id: widgetId, name, type };
       const config = {
-        type: "react-component",
+        type: 'react-component',
         component: MatPlotLibPanel.COMPONENT,
         props: {
           localDashboardId: id,
@@ -60,11 +60,11 @@ export const DashboardPlugin = ({
     ];
 
     return () => {
-      cleanups.forEach((cleanup) => cleanup());
+      cleanups.forEach(cleanup => cleanup());
     };
   }, [registerComponent]);
 
-  useListener(layout.eventHub, "PanelEvent.OPEN", handlePanelOpen);
+  useListener(layout.eventHub, 'PanelEvent.OPEN', handlePanelOpen);
 
   return <></>;
 };
