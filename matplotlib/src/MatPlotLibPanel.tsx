@@ -41,8 +41,8 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
   const { fetch } = props;
   const [imageSrc, setImageSrc] = useState<string>();
   const [inputTable, setInputTable] = useState<Table>();
-  // Set revision to -1 until we're listening to the revision table
-  const [revision, setRevision] = useState<number>(-1);
+  // Set revision to 0 until we're listening to the revision table
+  const [revision, setRevision] = useState<number>(0);
 
   useEffect(
     function initInputTable() {
@@ -82,7 +82,7 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
         const widget = await fetch();
         const imageData = widget.getDataAsBase64();
         setImageSrc(`data:image/png;base64,${imageData}`);
-        if (revision < 0) {
+        if (revision <= 0) {
           log.info("Getting new input table");
           // We haven't connected to the input table yet, do that
           const newInputTable =
