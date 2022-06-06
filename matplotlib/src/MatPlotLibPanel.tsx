@@ -13,8 +13,6 @@ enum InputColumn {
 
 enum InputKey {
   revision = 'revision',
-  width = 'width',
-  height = 'height',
 }
 
 export type MatPlotLibExportedObject = {
