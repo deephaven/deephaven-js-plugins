@@ -51,7 +51,7 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
         return;
       }
 
-      let table = inputTable;
+      const table = inputTable;
       async function openTable() {
         log.debug('openTable');
         const keyColumn = table.findColumn(InputColumn.key);
