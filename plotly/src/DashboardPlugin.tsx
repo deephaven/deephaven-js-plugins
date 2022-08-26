@@ -16,11 +16,16 @@ const PANEL_COMPONENT = 'PlotlyChartPanel';
 
 const PLOTLY_WIDGET_TYPE = 'plotly.figure';
 
-function hydratePlotlyChart(props, id) {
-  return {
-    ...props,
-    localDashboardId: id,
-    fetch: () => Promise.reject(new Error('Chart data not available')),
+function makePlotlyFetch(fetchWidget: () => Promise<JsWidget>) {
+  return async () => {
+    const resolved = await fetchWidget();
+    const dataBase64 = resolved.getDataAsBase64();
+    try {
+      return JSON.parse(atob(dataBase64));
+    } catch (e) {
+      log.error(e);
+      throw new Error('Unable to parse plot JSON');
+    }
   };
 }
 
@@ -29,19 +34,47 @@ export type JsWidget = {
   getDataAsBase64: () => string;
 };
 
+export interface PlotlyVariableDefinition {
+  name: string;
+  type: string;
+}
+
+export type PlotlyDashboardPluginProps = DashboardPluginComponentProps & {
+  session: {
+    getObject: (definition: PlotlyVariableDefinition) => Promise<JsWidget>;
+  };
+};
+
 export const DashboardPlugin = (
-  props: DashboardPluginComponentProps
+  props: PlotlyDashboardPluginProps
 ): JSX.Element => {
-  const { id, layout, registerComponent } = props;
+  const { id, layout, registerComponent, session } = props;
+  const hydratePlotlyChart = useCallback(
+    (props, id) => {
+      const { metadata } = props;
+      const { name } = metadata;
+      const definition = {
+        name,
+        type: PLOTLY_WIDGET_TYPE,
+      };
+      return {
+        ...props,
+        localDashboardId: id,
+        fetch: makePlotlyFetch(() => session.getObject(definition)),
+      };
+    },
+    [session]
+  );
+
   const handlePanelOpen = useCallback(
     ({
       dragEvent,
-      fetch: fetchWidget,
+      fetch,
       panelId = shortid.generate(),
       widget,
     }: {
       dragEvent?: DragEvent;
-      fetch: () => Promise<unknown>;
+      fetch: () => Promise<JsWidget>;
       panelId?: string;
       widget: VariableDefinition;
     }) => {
@@ -50,19 +83,7 @@ export const DashboardPlugin = (
       if ((type as string) !== PLOTLY_WIDGET_TYPE) {
         return;
       }
-
-      const fetch = async () => {
-        const resolved = (await fetchWidget()) as unknown as JsWidget;
-        const dataBase64 = resolved.getDataAsBase64();
-        try {
-          return JSON.parse(atob(dataBase64));
-        } catch (e) {
-          log.error(e);
-          throw new Error('Unable to parse plot JSON');
-        }
-      };
-
-      const metadata = { name, figure: name };
+      const metadata = { name };
 
       const config = {
         type: 'react-component',
@@ -71,7 +92,7 @@ export const DashboardPlugin = (
           localDashboardId: id,
           id: panelId,
           metadata,
-          fetch,
+          fetch: makePlotlyFetch(fetch),
         },
         title: name,
         id: panelId,
