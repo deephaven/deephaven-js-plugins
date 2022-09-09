@@ -16,14 +16,6 @@ const PANEL_COMPONENT = 'PlotlyChartPanel';
 
 const PLOTLY_WIDGET_TYPE = 'plotly.figure';
 
-function hydratePlotlyChart(props, id) {
-  return {
-    ...props,
-    localDashboardId: id,
-    fetch: () => Promise.reject(new Error('Chart data not available')),
-  };
-}
-
 export type JsWidget = {
   type: string;
   getDataAsBase64: () => string;
@@ -36,7 +28,7 @@ export const DashboardPlugin = (
   const handlePanelOpen = useCallback(
     ({
       dragEvent,
-      fetch: fetchWidget,
+      fetch,
       panelId = shortid.generate(),
       widget,
     }: {
@@ -51,18 +43,7 @@ export const DashboardPlugin = (
         return;
       }
 
-      const fetch = async () => {
-        const resolved = (await fetchWidget()) as unknown as JsWidget;
-        const dataBase64 = resolved.getDataAsBase64();
-        try {
-          return JSON.parse(atob(dataBase64));
-        } catch (e) {
-          log.error(e);
-          throw new Error('Unable to parse plot JSON');
-        }
-      };
-
-      const metadata = { name, figure: name };
+      const metadata = { name, figure: name, type };
 
       const config = {
         type: 'react-component',
@@ -85,13 +66,7 @@ export const DashboardPlugin = (
 
   useEffect(
     function registerComponentsAndReturnCleanup() {
-      const cleanups = [
-        registerComponent(
-          PANEL_COMPONENT,
-          PlotlyChartPanel,
-          hydratePlotlyChart
-        ),
-      ];
+      const cleanups = [registerComponent(PANEL_COMPONENT, PlotlyChartPanel)];
       return () => {
         cleanups.forEach(cleanup => cleanup());
       };

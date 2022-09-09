@@ -22,6 +22,16 @@ const config = {
 export class PlotlyChartPanel extends Component {
   static COMPONENT = 'PlotlyChartPanel';
 
+  static parseWidget(widget) {
+    const dataBase64 = widget.getDataAsBase64();
+    try {
+      return JSON.parse(atob(dataBase64));
+    } catch (e) {
+      log.error(e);
+      throw new Error('Unable to parse plot JSON');
+    }
+  }
+
   constructor(props) {
     super(props);
 
@@ -64,6 +74,7 @@ export class PlotlyChartPanel extends Component {
     const { fetch } = this.props;
     this.pending
       .add(fetch())
+      .then(PlotlyChartPanel.parseWidget)
       .then(this.handleLoadSuccess, this.handleLoadError);
   }
 
