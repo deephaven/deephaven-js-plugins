@@ -8,25 +8,15 @@ This folder contains internally developed JS Plugin modules. Each plugin should 
 
 ## Development
 
-For developing a new plugin, currently the easiest way to test it is to copy it into the `js-plugins` folder on the server. For example, to start developing with the `matplotlib` plugin:
-
+Start by building the plugins from the root directory of this repo:
 ```
-cd matplotlib
 npm install
-npm run start
+npm build
 ```
 
-Then, whenever you make changes, after it has finished re-compiling, copy the compiled build out to the server:
+Next, create a `manifest.json` file in the root directory of this project.
 
-```
-docker cp dist/. core-web-1:/usr/share/nginx/html/js-plugins/@deephaven/js-plugin-matplotlib/dist/
-```
-
-## Testing multiple plugins
-
-First, create a `manifest.json` file in the root directory of this project.
-
-In it, there should be a JSON file containing a plugins object. This plugins object contains of list of plugins with their name, version, and location (main). 
+In it, there should be JSON containing a plugins object. This plugins object contains of list of plugins with their name, version, and location (main).
 
 For example, if using matplotlib and plotly plugins with version 0.1.0, the file looks like this:
 ```
@@ -46,7 +36,7 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-Then, build and install the python server wheels. 
+Then, build and install the python server wheels. The version number will depend on which release `deephaven-core` is currently on.
 ```
 ./gradlew :py-server:assemble :py-embedded-server:assemble
 
@@ -62,4 +52,4 @@ Using the path to your local deephaven-js-plugins repo where the manifest.json i
 ```
 START_OPTS="-Ddeephaven.jsPlugins.resourceBase=<js-plugins-path>/deephaven-js-plugins" ./gradlew server-jetty-app:run
 ```
-The deephaven ide can then be opened at http://localhost:10000/ide/, with your plugins ready to use.
+The deephaven IDE can then be opened at http://localhost:10000/ide/, with your plugins ready to use.
