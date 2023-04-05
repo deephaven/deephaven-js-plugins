@@ -1,21 +1,20 @@
 import React, { useCallback, useEffect } from 'react';
 import shortid from 'shortid';
-import {
-  DashboardPluginComponentProps,
-  LayoutUtils,
-  useListener,
-} from '@deephaven/dashboard';
-import { VariableDefinition } from '@deephaven/jsapi-shim';
-import Log from '@deephaven/log';
+import type { DashboardPluginComponentProps } from '@deephaven/dashboard';
+import LayoutUtils from '@deephaven/dashboard/dist/layout/LayoutUtils';
+import { useListener } from '@deephaven/dashboard/dist/layout/hooks';
+import type { VariableDefinition } from '@deephaven/jsapi-shim';
+import Log from '@deephaven/log/dist/Log';
 import ObjectPanel from './ObjectPanel';
+import styles from './ObjectPanel.scss?inline';
 
 const log = Log.module('@deephaven/js-plugin-module-template.DashboardPlugin');
 
-export const DashboardPlugin = ({
+export function DashboardPlugin({
   id,
   layout,
   registerComponent,
-}: DashboardPluginComponentProps): JSX.Element => {
+}: DashboardPluginComponentProps): React.ReactNode {
   const handlePanelOpen = useCallback(
     ({
       dragEvent,
@@ -36,7 +35,7 @@ export const DashboardPlugin = ({
       log.info('Panel opened of type', type);
       const metadata = { id: widgetId, name, type };
       const config = {
-        type: 'react-component',
+        type: 'react-component' as const,
         component: ObjectPanel.COMPONENT,
         props: {
           localDashboardId: id,
@@ -64,7 +63,7 @@ export const DashboardPlugin = ({
 
   useListener(layout.eventHub, 'PanelEvent.OPEN', handlePanelOpen);
 
-  return <></>;
-};
+  return <style>{styles}</style>;
+}
 
 export default DashboardPlugin;

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import shortid from 'shortid';
 import {
   DashboardPluginComponentProps,
@@ -21,9 +21,9 @@ export type JsWidget = {
   getDataAsBase64: () => string;
 };
 
-export const DashboardPlugin = (
+export function DashboardPlugin(
   props: DashboardPluginComponentProps
-): JSX.Element => {
+): React.ReactNode {
   const { id, layout, registerComponent } = props;
   const handlePanelOpen = useCallback(
     ({
@@ -46,7 +46,7 @@ export const DashboardPlugin = (
       const metadata = { name, figure: name, type };
 
       const config = {
-        type: 'react-component',
+        type: 'react-component' as const,
         component: PANEL_COMPONENT,
         props: {
           localDashboardId: id,
@@ -76,7 +76,7 @@ export const DashboardPlugin = (
 
   useListener(layout.eventHub, PanelEvent.OPEN, handlePanelOpen);
 
-  return <></>;
-};
+  return null;
+}
 
 export default DashboardPlugin;

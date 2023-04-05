@@ -8,16 +8,17 @@ import {
 import { VariableDefinition } from '@deephaven/jsapi-shim';
 import Log from '@deephaven/log';
 import MatPlotLibPanel from './MatPlotLibPanel';
+import styles from './MatPlotLibPanel.scss?inline';
 
-export const VARIABLE_TYPE = 'matplotlib.figure.Figure';
+const VARIABLE_TYPE = 'matplotlib.figure.Figure';
 
 const log = Log.module('@deephaven/js-plugin-matplotlib.DashboardPlugin');
 
-export const DashboardPlugin = ({
+export function DashboardPlugin({
   id,
   layout,
   registerComponent,
-}: DashboardPluginComponentProps): JSX.Element => {
+}: DashboardPluginComponentProps): React.ReactNode {
   const handlePanelOpen = useCallback(
     ({
       dragEvent,
@@ -38,7 +39,7 @@ export const DashboardPlugin = ({
       log.info('Panel opened of type', type);
       const metadata = { id: widgetId, name, type };
       const config = {
-        type: 'react-component',
+        type: 'react-component' as const,
         component: MatPlotLibPanel.COMPONENT,
         props: {
           localDashboardId: id,
@@ -68,7 +69,7 @@ export const DashboardPlugin = ({
 
   useListener(layout.eventHub, 'PanelEvent.OPEN', handlePanelOpen);
 
-  return <></>;
-};
+  return <style>{styles}</style>;
+}
 
 export default DashboardPlugin;

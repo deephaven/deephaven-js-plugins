@@ -1,1 +1,1 @@
-export { default } from './DashboardPlugin';
+export * from './DashboardPlugin';

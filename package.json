@@ -7,7 +7,16 @@
     "plotly"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
-    "clean": "npm run clean --workspaces"
-  }
+    "start": "npm run start --workspaces",
+    "build": "npm run build --workspaces"
+  },
+  "devDependencies": {
+    "@deephaven/eslint-config": "^0.34.0",
+    "@deephaven/prettier-config": "^0.34.0",
+    "@deephaven/tsconfig": "^0.34.0",
+    "@types/shortid": "^0.0.29",
+    "eslint": "^8.37.0",
+    "prettier": "^2.8.7"
+  },
+  "prettier": "@deephaven/prettier-config"
 }

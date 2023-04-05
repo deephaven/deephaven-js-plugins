@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import React, {
   forwardRef,
   useCallback,
@@ -7,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import {
+  type ContextAction,
   Modal,
   ModalBody,
   ModalFooter,
@@ -48,7 +48,7 @@ const TablePlugin = (
 ): JSX.Element => {
   const { filter, table } = props;
   const [isModalOpen, setModalOpen] = useState(false);
-  const confirmButton = useRef<HTMLButtonElement>();
+  const confirmButton = useRef<HTMLButtonElement>(null);
 
   const handleOpenModal = useCallback(() => {
     setModalOpen(true);
@@ -62,7 +62,7 @@ const TablePlugin = (
     (data: IrisGridContextMenuData) => {
       const { value, column, model } = data;
       const { name, type } = column;
-      const actions = [];
+      const actions: ContextAction[] = [];
 
       actions.push({
         title: 'Display value',
@@ -92,7 +92,7 @@ const TablePlugin = (
         action: () => alert(model),
       });
 
-      const subMenu = [];
+      const subMenu: ContextAction[] = [];
 
       actions.push({
         title: 'Filter Sub Menu',
@@ -137,7 +137,7 @@ const TablePlugin = (
         isOpen={isModalOpen}
         className="theme-bg-light"
         onOpened={() => {
-          confirmButton.current.focus();
+          confirmButton.current?.focus();
         }}
       >
         <ModalHeader>Plugin Modal Title</ModalHeader>

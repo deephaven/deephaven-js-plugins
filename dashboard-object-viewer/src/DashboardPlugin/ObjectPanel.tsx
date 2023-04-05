@@ -1,9 +1,10 @@
-import { Button, LoadingOverlay } from '@deephaven/components';
-import { DashboardPanelProps, PanelEvent } from '@deephaven/dashboard';
-import Log from '@deephaven/log';
 import React, { ReactNode } from 'react';
 import ReactJson from 'react-json-view';
-import './ObjectPanel.scss';
+import Button from '@deephaven/components/dist/Button';
+import LoadingOverlay from '@deephaven/components/dist/LoadingOverlay';
+import { type DashboardPanelProps } from '@deephaven/dashboard';
+import PanelEvent from '@deephaven/dashboard/dist/PanelEvent';
+import Log from '@deephaven/log/dist/Log';
 
 const log = Log.module('ObjectPanel');
 
@@ -34,7 +35,7 @@ export type ObjectPanelState = {
   object?: unknown;
 };
 
-export function isJsWidget(object: unknown): object is JsWidget {
+function isJsWidget(object: unknown): object is JsWidget {
   return typeof (object as JsWidget).getDataAsBase64 === 'function';
 }
 
@@ -101,9 +102,9 @@ export class ObjectPanel extends React.Component<
     this.setState({ error, object: undefined });
   }
 
-  renderObjectData(): JSX.Element {
+  renderObjectData(): React.ReactNode {
     const { object } = this.state;
-    if (!object) {
+    if (object == null) {
       return null;
     }
     log.info('Rendering object data');
@@ -119,9 +120,9 @@ export class ObjectPanel extends React.Component<
     }
   }
 
-  renderExportedObjectList(): JSX.Element {
+  renderExportedObjectList(): React.ReactNode {
     const { object } = this.state;
-    if (!object || !isJsWidget(object)) {
+    if (object == null || !isJsWidget(object)) {
       return null;
     }
 
@@ -147,7 +148,7 @@ export class ObjectPanel extends React.Component<
     const { error, object } = this.state;
     const isLoading = error === undefined && object === undefined;
     const isLoaded = object !== undefined;
-    const errorMessage = error ? `${error}` : undefined;
+    const errorMessage = error != null ? `${error}` : undefined;
 
     return (
       <div className="object-panel-content">

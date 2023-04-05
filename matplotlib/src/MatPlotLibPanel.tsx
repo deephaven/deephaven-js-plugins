@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import dh, { Table } from '@deephaven/jsapi-shim';
 import Log from '@deephaven/log';
-import './MatPlotLibPanel.scss';
 import { PanelProps } from '@deephaven/dashboard';
 
 const log = Log.module('@deephaven/js-plugin-matplotlib.MatPlotLibPanel');
@@ -36,7 +35,7 @@ export type MatPlotLibPanelState = {
 /**
  * Displays a rendered matplotlib from the server
  */
-export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
+export function MatPlotLibPanel(props: MatPlotLibPanelProps): JSX.Element {
   const { fetch } = props;
   const [imageSrc, setImageSrc] = useState<string>();
   const [inputTable, setInputTable] = useState<Table>();
@@ -96,10 +95,12 @@ export const MatPlotLibPanel = (props: MatPlotLibPanelProps): JSX.Element => {
 
   return (
     <div className="mat-plot-lib-panel">
-      {imageSrc && <img src={imageSrc} alt="MatPlotLib render" />}
+      {imageSrc !== undefined && imageSrc !== '' && (
+        <img src={imageSrc} alt="MatPlotLib render" />
+      )}
     </div>
   );
-};
+}
 
 MatPlotLibPanel.COMPONENT = 'MatPlotLibPanel';
 
