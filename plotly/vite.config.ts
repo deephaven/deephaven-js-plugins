@@ -1,7 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
-import rollupNodePolyfill from 'rollup-plugin-polyfill-node';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -14,18 +12,6 @@ export default defineConfig(({ mode }) => ({
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
-      plugins: [rollupNodePolyfill({ include: null })],
-    },
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      // Some packages need this to start properly if they reference global
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-          process: true,
-        }),
-      ],
     },
   },
   define:

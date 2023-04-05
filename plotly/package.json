@@ -24,11 +24,9 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@types/react": "^17.0.2",
     "@vitejs/plugin-react-swc": "^3.0.0",
     "react": "^17.0.2",
-    "rollup-plugin-polyfill-node": "^0.12.0",
     "typescript": "^4.5.4",
     "vite": "^4.2.0"
   },
