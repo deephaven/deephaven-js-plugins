@@ -35,7 +35,7 @@ export type MatPlotLibPanelState = {
 /**
  * Displays a rendered matplotlib from the server
  */
-export function MatPlotLibPanel(props: MatPlotLibPanelProps): JSX.Element {
+export function MatPlotLibPanel(props: MatPlotLibPanelProps): React.ReactNode {
   const { fetch } = props;
   const [imageSrc, setImageSrc] = useState<string>();
   const [inputTable, setInputTable] = useState<Table>();
@@ -95,9 +95,7 @@ export function MatPlotLibPanel(props: MatPlotLibPanelProps): JSX.Element {
 
   return (
     <div className="mat-plot-lib-panel">
-      {imageSrc !== undefined && imageSrc !== '' && (
-        <img src={imageSrc} alt="MatPlotLib render" />
-      )}
+      {imageSrc !== undefined && <img src={imageSrc} alt="MatPlotLib render" />}
     </div>
   );
 }
