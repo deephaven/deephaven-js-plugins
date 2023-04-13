@@ -1,11 +1,10 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import type { PlotlyDataLayoutConfig } from 'plotly.js';
-import type { ChartPanelProps } from '@deephaven/dashboard-core-plugins';
 import { Table } from '@deephaven/jsapi-shim';
 import { assertNotNull } from '@deephaven/utils';
-import { ChartTheme, type ChartModel } from '@deephaven/chart';
+import { ChartTheme } from '@deephaven/chart';
 import PlotlyExpressChartModel from './PlotlyExpressChartModel';
-import ChartPanel from './ChartPanel';
+import ChartPanel, { type ChartPanelProps } from './ChartPanel';
 
 export interface PlotlyChartWidget {
   getDataAsBase64(): string;
@@ -80,9 +79,10 @@ export interface PlotlyExpressChartPanelProps extends ChartPanelProps {
   fetch(): Promise<PlotlyChartWidget>;
 }
 
-function PlotlyExpressChartPanel(
-  props: PlotlyExpressChartPanelProps
-): JSX.Element {
+const PlotlyExpressChartPanel = React.forwardRef<
+  ChartPanel,
+  PlotlyExpressChartPanelProps
+>((props, forwardedRef) => {
   const { fetch, ...rest } = props;
 
   const makeModel = useCallback(async () => {
@@ -96,7 +96,7 @@ function PlotlyExpressChartPanel(
     );
   }, [fetch]);
 
-  return <ChartPanel {...rest} makeModel={makeModel} />;
-}
+  return <ChartPanel ref={forwardedRef} {...rest} makeModel={makeModel} />;
+});
 
 export default PlotlyExpressChartPanel;

@@ -137,12 +137,13 @@ export class Chart extends Component<ChartProps, ChartState> {
   }
 
   subscribe(): void {
-    if (this.isSubscribed) {
+    if (this.isSubscribed || !this.props.isActive) {
       return;
     }
 
     const { model } = this.props;
-    if (!this.rect || this.rect.width === 0 || this.rect.height === 0) {
+    const rect = this.getPlotRect();
+    if (!rect || rect.width === 0 || rect.height === 0) {
       log.debug2('Delaying subscription until model dimensions are set');
       return;
     }
@@ -211,6 +212,7 @@ export class Chart extends Component<ChartProps, ChartState> {
       rect.width > 0 &&
       rect.height > 0
     ) {
+      this.subscribe(); // May need to subscribe if plot was too small before
       // Call relayout to resize avoiding the debouncing plotly does
       // https://github.com/plotly/plotly.js/issues/2769#issuecomment-402099552
       Plotly.relayout(this.plot.current.el, { autosize: true }).catch(

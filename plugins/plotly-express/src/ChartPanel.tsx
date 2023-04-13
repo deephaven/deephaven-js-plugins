@@ -2,10 +2,11 @@ import React, { Component, ReactElement, RefObject } from 'react';
 import Log from '@deephaven/log';
 import { Pending, PromiseUtils } from '@deephaven/utils';
 import type { Container, EventEmitter } from '@deephaven/golden-layout';
+import { WidgetPanel } from '@deephaven/dashboard-core-plugins';
 import PlotlyExpressChartModel from './PlotlyExpressChartModel';
 import Chart from './Chart';
 
-const log = Log.module('ChartPanel');
+const log = Log.module('PlotlyExpressChartPanel');
 
 interface ChartPanelMetadata {
   name: string;
@@ -13,7 +14,7 @@ interface ChartPanelMetadata {
   type: string;
 }
 
-interface ChartPanelProps {
+export interface ChartPanelProps {
   glContainer: Container;
   glEventHub: EventEmitter;
 
@@ -46,6 +47,9 @@ export class ChartPanel extends Component<ChartPanelProps, ChartPanelState> {
     this.handleLoadError = this.handleLoadError.bind(this);
     this.handleLoadSuccess = this.handleLoadSuccess.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleHide = this.handleHide.bind(this);
+    this.handleShow = this.handleShow.bind(this);
+    this.handleResize = this.handleResize.bind(this);
 
     this.panelContainer = React.createRef();
     this.chart = React.createRef();
@@ -141,7 +145,22 @@ export class ChartPanel extends Component<ChartPanelProps, ChartPanelState> {
     this.setState({ isLoading: false });
   }
 
+  handleHide(): void {
+    this.setActive(false);
+  }
+
+  handleShow(): void {
+    this.setActive(true);
+  }
+
+  handleResize(): void {
+    this.updateChart();
+  }
+
   setActive(isActive: boolean): void {
+    if (isActive === this.state.isActive) {
+      return;
+    }
     this.setState({ isActive }, () => {
       if (isActive) {
         this.loadModelIfNecessary();
@@ -157,27 +176,50 @@ export class ChartPanel extends Component<ChartPanelProps, ChartPanelState> {
   }
 
   render(): ReactElement {
-    const { model, isActive, isLoaded } = this.state;
+    const { glContainer, glEventHub, metadata } = this.props;
+    const { model, isActive, isLoading, isLoaded, isDisconnected, error } =
+      this.state;
+    const { name } = metadata;
 
+    const errorMessage =
+      error != null ? `Unable to open chart. ${error}` : undefined;
     return (
-      <div
-        ref={this.panelContainer}
-        className="chart-panel-container h-100 w-100"
+      <WidgetPanel
+        className="iris-chart-panel"
+        componentPanel={this}
+        glContainer={glContainer}
+        glEventHub={glEventHub}
+        onHide={this.handleHide}
+        onResize={this.handleResize}
+        onShow={this.handleShow}
+        onTabBlur={this.handleHide}
+        onTabFocus={this.handleShow}
+        errorMessage={errorMessage}
+        isDisconnected={isDisconnected}
+        isLoading={isLoading}
+        isLoaded={isLoaded}
+        widgetName={name}
+        widgetType="Chart"
       >
-        <div className="chart-container h-100 w-100">
-          {isLoaded && model && (
-            <Chart
-              isActive={isActive}
-              model={model}
-              ref={this.chart}
-              onDisconnect={this.handleDisconnect}
-              onReconnect={this.handleReconnect}
-              onUpdate={this.handleUpdate}
-              onError={this.handleError}
-            />
-          )}
+        <div
+          ref={this.panelContainer}
+          className="chart-panel-container h-100 w-100"
+        >
+          <div className="chart-container h-100 w-100">
+            {isLoaded && model && (
+              <Chart
+                isActive={isActive}
+                model={model}
+                ref={this.chart}
+                onDisconnect={this.handleDisconnect}
+                onReconnect={this.handleReconnect}
+                onUpdate={this.handleUpdate}
+                onError={this.handleError}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </WidgetPanel>
     );
   }
 }
