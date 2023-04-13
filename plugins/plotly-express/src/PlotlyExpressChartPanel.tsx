@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import type { PlotlyDataLayoutConfig } from 'plotly.js';
-import { ChartPanel, ChartPanelProps } from '@deephaven/dashboard-core-plugins';
+import type { ChartPanelProps } from '@deephaven/dashboard-core-plugins';
 import { Table } from '@deephaven/jsapi-shim';
 import { assertNotNull } from '@deephaven/utils';
 import { ChartTheme, type ChartModel } from '@deephaven/chart';
 import PlotlyExpressChartModel from './PlotlyExpressChartModel';
+import ChartPanel from './ChartPanel';
 
 export interface PlotlyChartWidget {
   getDataAsBase64(): string;

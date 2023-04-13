@@ -6,7 +6,6 @@ import type { Layout, Icon, Data } from 'plotly.js';
 import Plotly from './plotly/Plotly';
 import Plot from './plotly/Plot';
 import PlotlyExpressChartModel from './PlotlyExpressChartModel';
-import './Chart.scss';
 
 const log = Log.module('PlotlyExpressChart');
 

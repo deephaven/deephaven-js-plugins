@@ -1,12 +1,12 @@
-import {
+import type {
   Layout,
   Data,
-  type PlotData,
-  type BoxPlotData,
-  type ViolinData,
-  type OhlcData,
-  type CandlestickData,
-  type PieData,
+  PlotData,
+  BoxPlotData,
+  ViolinData,
+  OhlcData,
+  CandlestickData,
+  PieData,
 } from 'plotly.js';
 import dh from '@deephaven/jsapi-shim';
 import type {

@@ -1,7 +1,5 @@
 import React, { Component, ReactElement, RefObject } from 'react';
-import { type ChartModelSettings } from '@deephaven/chart';
 import Log from '@deephaven/log';
-import { type WorkspaceSettings } from '@deephaven/redux';
 import { Pending, PromiseUtils } from '@deephaven/utils';
 import type { Container, EventEmitter } from '@deephaven/golden-layout';
 import PlotlyExpressChartModel from './PlotlyExpressChartModel';
