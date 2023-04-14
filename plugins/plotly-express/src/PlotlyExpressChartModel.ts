@@ -22,7 +22,7 @@ import {
 } from '@deephaven/chart';
 import Log from '@deephaven/log';
 
-const log = Log.module('PlotlyExpressChartModel');
+const log = Log.module('@deephaven/js-plugin-plotly-express.ChartModel');
 
 function isPlotData(data: Data): data is PlotData {
   return (
