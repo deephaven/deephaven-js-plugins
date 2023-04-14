@@ -31,7 +31,7 @@ export function DashboardPlugin(
       widget: VariableDefinition;
     }) => {
       const { type, title } = widget;
-      if (type !== 'deephaven.plugin.chart.DeephavenFigure') {
+      if (type !== 'deephaven.plot.express.DeephavenFigure') {
         return;
       }
 

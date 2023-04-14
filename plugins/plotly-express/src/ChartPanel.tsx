@@ -6,7 +6,7 @@ import { WidgetPanel } from '@deephaven/dashboard-core-plugins';
 import PlotlyExpressChartModel from './PlotlyExpressChartModel';
 import Chart from './Chart';
 
-const log = Log.module('PlotlyExpressChartPanel');
+const log = Log.module('@deephaven/js-plugin-plotly-express.ChartPanel');
 
 interface ChartPanelMetadata {
   name: string;
@@ -36,7 +36,7 @@ interface ChartPanelState {
 export class ChartPanel extends Component<ChartPanelProps, ChartPanelState> {
   static displayName = 'PlotlyExpressChartPanel';
 
-  static COMPONENT = 'PlotlyExpressChartPanel';
+  static COMPONENT = '@deephaven/js-plugin-plotly-express.ChartPanel';
 
   constructor(props: ChartPanelProps) {
     super(props);

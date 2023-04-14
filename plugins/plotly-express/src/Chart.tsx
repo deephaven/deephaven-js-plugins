@@ -7,7 +7,7 @@ import Plotly from './plotly/Plotly';
 import Plot from './plotly/Plot';
 import PlotlyExpressChartModel from './PlotlyExpressChartModel';
 
-const log = Log.module('PlotlyExpressChart');
+const log = Log.module('@deephaven/js-plugin-plotly-express.Chart');
 
 interface ChartProps {
   model: PlotlyExpressChartModel;
