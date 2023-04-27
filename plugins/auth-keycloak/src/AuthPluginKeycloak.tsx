@@ -1,8 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { AuthPlugin, AuthPluginProps } from '@deephaven/auth-plugins';
-import { LoadingOverlay } from '@deephaven/components';
+import React, { useCallback } from 'react';
+import {
+  AuthPlugin,
+  AuthPluginBase,
+  AuthPluginProps,
+} from '@deephaven/auth-plugins';
+import { useClient } from '@deephaven/jsapi-bootstrap';
+import { useBroadcastLoginListener } from '@deephaven/jsapi-components';
 import Log from '@deephaven/log';
 import Keycloak from 'keycloak-js';
+import { LoginOptions } from '@deephaven/jsapi-types';
 
 const log = Log.module('@deephaven/js-plugin-auth-keycloak.AuthPluginKeycloak');
 
@@ -17,12 +23,10 @@ const CLIENT_ID_PROPERTY = 'authentication.oidc.keycloak.clientId';
  * AuthPlugin that redirects the user to the configured keycloak instance.
  */
 function Component({
-  client,
   authConfigValues,
-  onSuccess,
-  onFailure,
+  children,
 }: AuthPluginProps): JSX.Element {
-  const [error, setError] = useState<unknown>();
+  const client = useClient();
 
   const getConfig = useCallback(
     (key: string) => {
@@ -37,55 +41,54 @@ function Component({
     [authConfigValues]
   );
 
-  useEffect(() => {
-    let isCanceled = false;
-    async function login() {
-      try {
-        const url = getConfig(BASE_URL_PROPERTY);
-        const realm = getConfig(REALM_PROPERTY);
-        const clientId = getConfig(CLIENT_ID_PROPERTY);
-        const keycloak = new Keycloak({ realm, url, clientId });
-        const authenticated = await keycloak.init({
-          pkceMethod: 'S256',
-          checkLoginIframe: false,
-        });
-        if (isCanceled) {
-          log.info('Previous login failure canceled');
-          return;
-        }
-        if (!authenticated) {
-          log.info(
-            'User isn\'t logged in, redirecting to IDP (this may auto-redirect back here again)... Click "Go" again when you return.'
-          );
-          keycloak.login({});
-          return;
-        }
+  const getKeycloak = useCallback(() => {
+    const url = getConfig(BASE_URL_PROPERTY);
+    const realm = getConfig(REALM_PROPERTY);
+    const clientId = getConfig(CLIENT_ID_PROPERTY);
+    return new Keycloak({ realm, url, clientId });
+  }, [getConfig]);
 
-        log.info('Keycloak api authenticated');
-        await client.login({ type: OIDC_AUTH_TYPE, token: keycloak.token });
-        onSuccess();
-      } catch (e) {
-        if (isCanceled) {
-          log.info('Previous login failure canceled');
-          return;
-        }
-        log.error('Unable to login:', e);
-        setError(e);
-        onFailure(e);
-      }
+  const getLoginOptions = useCallback(async () => {
+    const keycloak = getKeycloak();
+    const authenticated = await keycloak.init({
+      pkceMethod: 'S256',
+      checkLoginIframe: false,
+    });
+    if (!authenticated) {
+      log.info(
+        'User isn\'t logged in, redirecting to IDP (this may auto-redirect back here again)... Click "Go" again when you return.'
+      );
+      keycloak.login({});
+
+      return new Promise<LoginOptions>(() => {
+        // We just want to wait for keycloak to load, so return a promise that never resolves
+      });
     }
-    login();
-    return () => {
-      isCanceled = true;
-    };
-  }, [client, getConfig, onFailure, onSuccess]);
+
+    log.info('Keycloak api authenticated');
+    const newProfile = await keycloak.loadUserProfile();
+    const userInfo = await keycloak.loadUserInfo();
+    log.info('Keycloak profile:', newProfile, 'userInfo:', userInfo);
+    return { type: OIDC_AUTH_TYPE, token: keycloak.token };
+  }, [getKeycloak]);
+
+  const onLogin = useCallback(() => {
+    log.debug('Received login event');
+  }, []);
+  const onLogout = useCallback(() => {
+    try {
+      const keycloak = getKeycloak();
+      keycloak.clearToken();
+    } catch (e) {
+      log.error('Unable to clear token from keycloak:', e);
+    }
+  }, [getKeycloak]);
+  useBroadcastLoginListener(onLogin, onLogout);
+
   return (
-    <LoadingOverlay
-      data-testid="auth-keycloak-loading"
-      isLoading
-      isLoaded={false}
-      errorMessage={error != null ? `${error}` : null}
-    />
+    <AuthPluginBase getLoginOptions={getLoginOptions}>
+      {children}
+    </AuthPluginBase>
   );
 }
 

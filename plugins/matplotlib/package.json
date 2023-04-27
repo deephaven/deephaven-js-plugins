@@ -35,10 +35,10 @@
     "react": "^17.0.2"
   },
   "dependencies": {
-    "@deephaven/components": "0.34.0",
-    "@deephaven/dashboard": "0.34.0",
-    "@deephaven/jsapi-shim": "^0.34.0",
-    "@deephaven/log": "0.34.0",
+    "@deephaven/components": "0.37.1-logout.15",
+    "@deephaven/dashboard": "0.37.1-logout.15",
+    "@deephaven/jsapi-shim": "0.37.1-logout.15",
+    "@deephaven/log": "0.37.1-logout.15",
     "shortid": "^2.2.16"
   },
   "publishConfig": {
