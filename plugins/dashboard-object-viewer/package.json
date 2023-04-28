@@ -18,10 +18,10 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@deephaven/components": "0.37.1-logout.15",
-    "@deephaven/dashboard": "0.37.1-logout.15",
-    "@deephaven/jsapi-shim": "0.37.1-logout.15",
-    "@deephaven/log": "0.37.1-logout.15",
+    "@deephaven/components": "0.37.4-logout.1",
+    "@deephaven/dashboard": "0.37.4-logout.1",
+    "@deephaven/jsapi-shim": "0.37.4-logout.1",
+    "@deephaven/log": "0.37.4-logout.1",
     "react-json-view": "^1.21.3",
     "shortid": "^2.2.16"
   },

@@ -34,11 +34,11 @@
     "react": "^17.0.2"
   },
   "dependencies": {
-    "@deephaven/components": "0.37.1-logout.15",
-    "@deephaven/dashboard": "0.37.1-logout.15",
-    "@deephaven/jsapi-shim": "0.37.1-logout.15",
-    "@deephaven/log": "0.37.1-logout.15",
-    "@deephaven/utils": "0.37.1-logout.15",
+    "@deephaven/components": "0.37.4-logout.1",
+    "@deephaven/dashboard": "0.37.4-logout.1",
+    "@deephaven/jsapi-shim": "0.37.4-logout.1",
+    "@deephaven/log": "0.37.4-logout.1",
+    "@deephaven/utils": "0.37.4-logout.1",
     "plotly.js-dist-min": "^2.20.0",
     "react-plotly.js": "^2.4.0",
     "shortid": "^2.2.16"

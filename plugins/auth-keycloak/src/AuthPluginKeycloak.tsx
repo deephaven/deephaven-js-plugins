@@ -1,14 +1,13 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
+import Keycloak from 'keycloak-js';
 import {
   AuthPlugin,
   AuthPluginBase,
   AuthPluginProps,
 } from '@deephaven/auth-plugins';
-import { useClient } from '@deephaven/jsapi-bootstrap';
 import { useBroadcastLoginListener } from '@deephaven/jsapi-components';
-import Log from '@deephaven/log';
-import Keycloak from 'keycloak-js';
 import { LoginOptions } from '@deephaven/jsapi-types';
+import { Log } from '@deephaven/log';
 
 const log = Log.module('@deephaven/js-plugin-auth-keycloak.AuthPluginKeycloak');
 
@@ -26,8 +25,6 @@ function Component({
   authConfigValues,
   children,
 }: AuthPluginProps): JSX.Element {
-  const client = useClient();
-
   const getConfig = useCallback(
     (key: string) => {
       const value = authConfigValues.get(key);
@@ -41,7 +38,7 @@ function Component({
     [authConfigValues]
   );
 
-  const getKeycloak = useCallback(() => {
+  const keycloak = useMemo(() => {
     const url = getConfig(BASE_URL_PROPERTY);
     const realm = getConfig(REALM_PROPERTY);
     const clientId = getConfig(CLIENT_ID_PROPERTY);
@@ -49,15 +46,12 @@ function Component({
   }, [getConfig]);
 
   const getLoginOptions = useCallback(async () => {
-    const keycloak = getKeycloak();
     const authenticated = await keycloak.init({
       pkceMethod: 'S256',
       checkLoginIframe: false,
     });
     if (!authenticated) {
-      log.info(
-        'User isn\'t logged in, redirecting to IDP (this may auto-redirect back here again)... Click "Go" again when you return.'
-      );
+      log.info("User isn't logged in, redirecting to IDP for authentication");
       keycloak.login({});
 
       return new Promise<LoginOptions>(() => {
@@ -66,23 +60,21 @@ function Component({
     }
 
     log.info('Keycloak api authenticated');
-    const newProfile = await keycloak.loadUserProfile();
-    const userInfo = await keycloak.loadUserInfo();
-    log.info('Keycloak profile:', newProfile, 'userInfo:', userInfo);
     return { type: OIDC_AUTH_TYPE, token: keycloak.token };
-  }, [getKeycloak]);
+  }, [keycloak]);
 
   const onLogin = useCallback(() => {
     log.debug('Received login event');
   }, []);
-  const onLogout = useCallback(() => {
+  const onLogout = useCallback(async () => {
+    log.info('onLogout received');
     try {
-      const keycloak = getKeycloak();
-      keycloak.clearToken();
+      await keycloak.logout({});
+      log.info('logged out');
     } catch (e) {
-      log.error('Unable to clear token from keycloak:', e);
+      log.error('Unable to logout of keycloak:', e);
     }
-  }, [getKeycloak]);
+  }, [keycloak]);
   useBroadcastLoginListener(onLogin, onLogout);
 
   return (

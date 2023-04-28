@@ -8,9 +8,9 @@
     "build": "lerna run build --stream"
   },
   "devDependencies": {
-    "@deephaven/eslint-config": "0.37.1-logout.15",
-    "@deephaven/prettier-config": "0.37.1-logout.15",
-    "@deephaven/tsconfig": "0.37.1-logout.15",
+    "@deephaven/eslint-config": "0.37.4-logout.1",
+    "@deephaven/prettier-config": "0.37.4-logout.1",
+    "@deephaven/tsconfig": "0.37.4-logout.1",
     "@types/shortid": "^0.0.29",
     "eslint": "^8.37.0",
     "lerna": "^6.6.1",
