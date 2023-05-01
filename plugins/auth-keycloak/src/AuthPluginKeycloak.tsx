@@ -51,7 +51,9 @@ function Component({
       checkLoginIframe: false,
     });
     if (!authenticated) {
-      log.info("User isn't logged in, redirecting to IDP for authentication");
+      log.info(
+        "User isn't logged in, redirecting to IDP for authentication..."
+      );
       keycloak.login({});
 
       return new Promise<LoginOptions>(() => {
@@ -59,7 +61,7 @@ function Component({
       });
     }
 
-    log.info('Keycloak api authenticated');
+    log.info('Authenticated with Keycloak API. Logging into Deephaven...');
     return { type: OIDC_AUTH_TYPE, token: keycloak.token };
   }, [keycloak]);
 

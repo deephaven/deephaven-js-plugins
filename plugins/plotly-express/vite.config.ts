@@ -12,7 +12,6 @@ export default defineConfig(({ mode }) => ({
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'redux', 'react-redux'],
-      // test2
     },
   },
   define:
