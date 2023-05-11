@@ -54,11 +54,8 @@ function Component({
       log.info(
         "User isn't logged in, redirecting to IDP for authentication..."
       );
-      keycloak.login({});
-
-      return new Promise<LoginOptions>(() => {
-        // We just want to wait for keycloak to load, so return a promise that never resolves
-      });
+      // Keycloak should redirect to another page, but we'll await the login promise just in case that behaviour changes
+      await keycloak.login({});
     }
 
     log.info('Authenticated with Keycloak API. Logging into Deephaven...');
