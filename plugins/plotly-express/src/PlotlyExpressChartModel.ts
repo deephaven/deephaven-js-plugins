@@ -132,7 +132,7 @@ class PlotlyExpressChartModel extends ChartModel {
     /**
      * We will iterate over the traces with the following expectations
      * 1. Traces in the same subplot are contiguous in the data array
-     * 2. Traces of differet plot types indicate a new subplot
+     * 2. Traces of different plot types indicate a new subplot
      * 3. If the domain changes between traces, that indicates a new subplot
      * 4. Each subplot should start their colors from the beginning of the colorway
      */
