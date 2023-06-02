@@ -26,7 +26,7 @@ export function DashboardPlugin(
     ({
       dragEvent,
       fetch,
-      metadata,
+      metadata = {},
       panelId = shortid.generate(),
       widget,
     }: {
@@ -49,7 +49,7 @@ export function DashboardPlugin(
           localDashboardId: id,
           id: panelId,
           metadata: {
-            ...(metadata ?? {}),
+            ...metadata,
             name,
             figure: name,
             type,

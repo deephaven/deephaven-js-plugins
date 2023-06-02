@@ -20,7 +20,7 @@ export function DashboardPlugin(
     async ({
       dragEvent,
       fetch,
-      metadata,
+      metadata = {},
       panelId = shortid.generate(),
       widget,
     }: {
@@ -42,7 +42,7 @@ export function DashboardPlugin(
           localDashboardId: id,
           id: panelId,
           metadata: {
-            ...(metadata ?? {}),
+            ...metadata,
             name: title,
             figure: title,
             type,
