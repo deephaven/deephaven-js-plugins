@@ -31,15 +31,15 @@ npm run build
 
 Next, create a `manifest.json` file in the root directory of this project.
 
-In it, there should be JSON containing a plugins object. This plugins object contains of list of plugins with their name, version, and location (main).
+In it, there should be JSON containing a plugins object. This plugins object contains of list of plugins with their location within this repo (name), version, and index location (main).
 
 For example, if using matplotlib and plotly plugins with version 0.1.0, the file looks like this:
 
 ```
 {
     "plugins": [
-      { "name": "matplotlib", "version": "0.1.0", "main": "dist/index.js" },
-      { "name": "plotly", "version": "0.1.0", "main": "dist/index.js" }
+      { "name": "plugins/matplotlib", "version": "0.1.0", "main": "dist/index.js" },
+      { "name": "plugins/plotly", "version": "0.1.0", "main": "dist/index.js" }
     ]
 }
 ```
@@ -65,6 +65,12 @@ Finally, install the plugin wheels for the plugins, plotly and matplotlib in thi
 
 ```
 pip install <plotly-plugin-path>/deephaven-plugin-plotly/dist/deephaven_plugin_plotly-0.0.1.dev2-py3-none-any.whl <matplotlib-plugin-path>/deephaven-plugin-matplotlib/dist/deephaven_plugin_matplotlib-0.1.1-py3-none-any.whl
+```
+
+If you're reinstalling the python wheels without a version bump (generally for the purpose of development), you'll want to add the `--force-reinstall` tag. The `--no-deps` tag is also recommended as `--force-reinstall` will update all the dependencies as well, which is generally unnecessary.
+For example, on reinstalls the above command becomes 
+```
+pip install --force-reinstall --no-deps <plotly-plugin-path>/deephaven-plugin-plotly/dist/deephaven_plugin_plotly-0.0.1.dev2-py3-none-any.whl <matplotlib-plugin-path>/deephaven-plugin-matplotlib/dist/deephaven_plugin_matplotlib-0.1.1-py3-none-any.whl
 ```
 
 Using the path to your local deephaven-js-plugins repo where the manifest.json is contained, start the server with the following command:
