@@ -90,7 +90,7 @@ For example, on reinstalls the above command becomes
 pip install --force-reinstall --no-deps <plotly-plugin-path>/deephaven-plugin-plotly/dist/deephaven_plugin_plotly-0.0.1.dev2-py3-none-any.whl <matplotlib-plugin-path>/deephaven-plugin-matplotlib/dist/deephaven_plugin_matplotlib-0.1.1-py3-none-any.whl
 ```
 
-Using the path to your local deephaven-js-plugins repo where the manifest.json is contiained (which will be in the `plugins` directory if you followed the steps above), start the server with the following command:
+Using the path to your local deephaven-js-plugins repo where the manifest.json is contained (which will be in the `plugins` directory if you followed the steps above), start the server with the following command:
 
 ```
 START_OPTS="-Ddeephaven.jsPlugins.resourceBase=<js-plugins-path>/deephaven-js-plugins/plugins" ./gradlew server-jetty-app:run
