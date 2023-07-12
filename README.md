@@ -1,6 +1,6 @@
 # Plugin modules
 
-The `plugin` folder contains internally developed JS Plugin modules. Each plugin should be the following:
+The `plugins` folder contains internally developed JS Plugin modules. Each plugin should be the following:
 
 - Based off the [JS Module Plugin template](https://github.com/deephaven/deephaven-js-plugin-template/)
 - Package name `@deephaven/js-plugin-<folderName>`
