@@ -29,7 +29,7 @@ To build for publishing, run
 npm run build
 ```
 
-Next, create a `manifest.json` file in the `plugin` directory of this project or modify the existing one.
+Next, create a `manifest.json` file in the `plugins` directory of this project or modify the existing one.
 
 In it, there should be JSON containing a plugins object. This plugins object contains of list of plugins with their location within this repo (name), version, and index location (main).
 
