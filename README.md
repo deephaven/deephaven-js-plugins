@@ -31,7 +31,24 @@ npm run build
 
 Next, create a `manifest.json` file in the `plugins` directory of this project or modify the existing one.
 
-In it, there should be JSON containing a plugins object. This plugins object contains of list of plugins with their location within this repo (name), version, and index location (main).
+In it, there should be JSON containing a plugins object containing metadata about all plugins to use, e.g.:
+```
+{
+  "plugins": [
+    {
+      /** Name of the plugin, and relative path from this manifest to the plugin's root folder. */
+      "name": "...", 
+
+      /** Version of the plugin. */
+      "version": "...", 
+
+      /** Location of the primary entry point for the plugin. */
+      "main": "..." 
+    },
+    ...
+  ]
+}
+```
 
 For example, if using matplotlib and plotly plugins with version 0.1.0, the file looks like this:
 
