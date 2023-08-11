@@ -12,13 +12,7 @@ export default defineConfig(({ mode }) => ({
       formats: ['cjs'],
     },
     rollupOptions: {
-      external: [
-        'react',
-        'react-dom',
-        'redux',
-        'react-redux',
-        '@deephaven/jsapi-bootstrap',
-      ],
+      external: ['react', 'react-dom', 'redux', 'react-redux'],
     },
   },
   define:
