@@ -19,7 +19,8 @@
       "require": "./dist/bundle/index.js",
       "default": "./dist/bundle/index.js"
     },
-    "./*.js": "./dist/*.js"
+    "./*.js": "./dist/*.js",
+    "./*": "./dist/*.js"
   },
   "repository": {
     "type": "git",
