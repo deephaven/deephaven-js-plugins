@@ -16,7 +16,8 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/bundle/index.js"
+      "require": "./dist/bundle/index.js",
+      "default": "./dist/bundle/index.js"
     },
     "./*.js": "./dist/*.js"
   },
@@ -33,7 +34,7 @@
     "build": "tsc && vite build"
   },
   "devDependencies": {
-    "@deephaven/jsapi-types": "0.40.0",
+    "@deephaven/jsapi-types": "0.45.2-docs.7",
     "@types/deep-equal": "^1.0.1",
     "@types/plotly.js": "^2.12.18",
     "@types/plotly.js-dist-min": "^2.3.1",
@@ -48,13 +49,13 @@
     "react": "^17.0.2"
   },
   "dependencies": {
-    "@deephaven/chart": "0.40.0",
-    "@deephaven/components": "0.40.0",
-    "@deephaven/dashboard": "0.40.0",
-    "@deephaven/dashboard-core-plugins": "0.40.0",
-    "@deephaven/jsapi-bootstrap": "0.40.0",
-    "@deephaven/log": "0.40.0",
-    "@deephaven/utils": "0.40.0",
+    "@deephaven/chart": "0.45.2-docs.7",
+    "@deephaven/components": "0.45.2-docs.7",
+    "@deephaven/dashboard": "0.45.2-docs.7",
+    "@deephaven/dashboard-core-plugins": "0.45.2-docs.7",
+    "@deephaven/jsapi-bootstrap": "0.45.2-docs.7",
+    "@deephaven/log": "0.45.2-docs.7",
+    "@deephaven/utils": "0.45.2-docs.7",
     "deep-equal": "^2.2.1",
     "plotly.js": "^2.23.0",
     "plotly.js-dist-min": "^2.23.0",

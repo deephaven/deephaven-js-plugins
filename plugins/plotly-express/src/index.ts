@@ -1,3 +1,3 @@
-export * from './DashboardPlugin';
-export * from './PlotlyExpressChartModel';
-export * from './PlotlyExpressChartUtils';
+export * from './DashboardPlugin.js';
+export * from './PlotlyExpressChartModel.js';
+export * from './PlotlyExpressChartUtils.js';

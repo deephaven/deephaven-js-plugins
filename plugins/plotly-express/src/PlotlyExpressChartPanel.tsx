@@ -6,12 +6,12 @@ import {
 } from '@deephaven/dashboard-core-plugins';
 import { ChartTheme } from '@deephaven/chart';
 import { useApi } from '@deephaven/jsapi-bootstrap';
-import PlotlyExpressChartModel from './PlotlyExpressChartModel';
+import PlotlyExpressChartModel from './PlotlyExpressChartModel.js';
 import {
   getWidgetData,
   getDataMappings,
   type PlotlyChartWidget,
-} from './PlotlyExpressChartUtils';
+} from './PlotlyExpressChartUtils.js';
 
 export interface PlotlyExpressChartPanelProps extends ChartPanelProps {
   fetch(): Promise<PlotlyChartWidget>;

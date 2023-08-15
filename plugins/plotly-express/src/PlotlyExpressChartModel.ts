@@ -7,7 +7,7 @@ import type {
 } from '@deephaven/jsapi-types';
 import { ChartModel, ChartUtils, ChartTheme } from '@deephaven/chart';
 import Log from '@deephaven/log';
-import { applyColorwayToData } from './PlotlyExpressChartUtils';
+import { applyColorwayToData } from './PlotlyExpressChartUtils.js';
 
 const log = Log.module('@deephaven/js-plugin-plotly-express.ChartModel');
 
