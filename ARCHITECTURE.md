@@ -19,10 +19,10 @@ When a client requests info about a widget, the server will call a method on the
 
 ```mermaid
 sequenceDiagram
-  participant S as Server
-  participant P as Plugin
-  participant J as JS Plugin
   participant W as Web IDE
+  participant J as JS Plugin
+  participant P as Plugin
+  participant S as Server
   P ->> S: Register
   W ->> S: Run code
   activate S
@@ -48,9 +48,9 @@ A JS `DashboardPlugin` will receive a `fetch` prop that can be used to fetch the
 
 ```mermaid
 sequenceDiagram
-  participant S as Server
-  participant P as Plugin
   participant J as JS Plugin
+  participant P as Plugin
+  participant S as Server
   J ->> S: Fetch object info
   S ->> P: to_bytes(object)
   P -->> S: Payload
@@ -82,8 +82,31 @@ sequenceDiagram
 
 The server may send unsolicited messages to the client in a bidirectional communication scenario. The plugin may export objects with messages. A JS Plugin should add an event listener via `widget.addEventListener('message', fn)` to receive messages. The listener will be called with a `CustomEvent` whose `detail` is the message payload and exported objects.
 
+```mermaid
+sequenceDiagram
+  participant S as Server
+  participant P as Plugin
+  participant J as JS Plugin
+  J ->> S: Fetch object info
+  S -->> J: Widget data and exports
+  J ->> J: widget.addEventListener('message', fn)
+  P ->> S: Client MessageStream.on_data(payload, [references])
+  S ->> J: 'message' event with payload and references
+```
+
 ## Client message
 
 The client can send a message to the server by calling `widget.sendMessage(message, [references])`. The references are optional and are tickets referencing other exported objects.
 
 The message should either be a UTF-8 encoded string or a `Uint8Array`. The server plugin will receive the message via the `MessageStream.on_data` method in created and returned in `create_client_connection`.
+
+```mermaid
+sequenceDiagram
+  participant S as Server
+  participant P as Plugin
+  participant J as JS Plugin
+  J ->> S: Fetch object info
+  S -->> J: Widget data and exports
+  J ->> S: widget.sendMessage('message', [references])
+  S ->> P: MessageStream.on_data(payload, [references])
+```
