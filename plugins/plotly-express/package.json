@@ -52,8 +52,8 @@
   "dependencies": {
     "@deephaven/chart": "0.46.0",
     "@deephaven/components": "0.46.0",
-    "@deephaven/dashboard": "0.46.0",
-    "@deephaven/dashboard-core-plugins": "0.46.0",
+    "@deephaven/dashboard": "0.47.1-beta.0",
+    "@deephaven/dashboard-core-plugins": "0.47.1-beta.0",
     "@deephaven/jsapi-bootstrap": "0.46.0",
     "@deephaven/log": "0.46.0",
     "@deephaven/utils": "0.46.0",
