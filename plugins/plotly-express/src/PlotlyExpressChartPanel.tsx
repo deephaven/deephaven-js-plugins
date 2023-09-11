@@ -51,6 +51,8 @@ function PlotlyExpressChartPanel(props: PlotlyExpressChartPanelProps) {
 
       function handleMouseDown() {
         model?.pauseUpdates();
+        // The once option removes the listener after it is called
+        window.addEventListener('mouseup', handleMouseUp, { once: true });
       }
 
       function handleMouseUp() {
@@ -68,13 +70,11 @@ function PlotlyExpressChartPanel(props: PlotlyExpressChartPanelProps) {
       }
 
       container.addEventListener('mousedown', handleMouseDown);
-      container.addEventListener('mouseup', handleMouseUp);
       container.addEventListener('wheel', handleWheel);
 
       return () => {
         window.clearTimeout(wheelTimeout);
         container.removeEventListener('mousedown', handleMouseDown);
-        container.removeEventListener('mouseup', handleMouseUp);
         container.removeEventListener('wheel', handleWheel);
       };
     },
