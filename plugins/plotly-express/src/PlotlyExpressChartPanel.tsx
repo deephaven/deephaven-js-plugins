@@ -74,6 +74,7 @@ function PlotlyExpressChartPanel(props: PlotlyExpressChartPanelProps) {
 
       return () => {
         window.clearTimeout(wheelTimeout);
+        window.removeEventListener('mouseup', handleMouseUp);
         container.removeEventListener('mousedown', handleMouseDown);
         container.removeEventListener('wheel', handleWheel);
       };
