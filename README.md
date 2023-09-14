@@ -1,4 +1,6 @@
-# Plugin modules
+# DEPRECATED
+
+Please use the monorepo at https://github.com/deephaven/deephaven-plugins
 
 The `plugins` folder contains internally developed JS Plugin modules. Each plugin should be the following:
 
